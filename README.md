@@ -10,7 +10,7 @@ views are synchronised at each step so that they agree on their overlaps.
 ![SD 2, three modes](assets/sd2_modes.jpg)
 
 *SD 2 base, 3072 x 512, 21 views of 512 px, 50 DDIM steps, same seed. Without synchronisation each view lives its
-own life and the seams are visible. The evolution of $\hat x_0$ during sampling is in [assets/sd2_trajectory.webp](assets/sd2_trajectory.webp).*
+own life and the seams are visible.*
 
 ## Method
 
