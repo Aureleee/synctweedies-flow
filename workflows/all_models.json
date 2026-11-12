@@ -1,0 +1,2050 @@
+{
+ "last_node_id": 42,
+ "last_link_id": 44,
+ "nodes": [
+  {
+   "id": 1,
+   "type": "MarkdownNote",
+   "pos": [
+    0,
+    -380
+   ],
+   "size": [
+    900,
+    300
+   ],
+   "flags": {},
+   "order": 1,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "MarkdownNote"
+   },
+   "widgets_values": [
+    "## SD 2 base, panorama 3072 x 512\nModel of the paper (eps prediction). 21 views of 512, stride 128, 50 DDIM steps, CFG 7.5.\nChange the mode in *Synchronisation mode*: `independent` (seams), `multidiffusion`, `synctweedies`."
+   ],
+   "title": "Note"
+  },
+  {
+   "id": 2,
+   "type": "CheckpointLoaderSimple",
+   "pos": [
+    0,
+    0
+   ],
+   "size": [
+    320,
+    120
+   ],
+   "flags": {},
+   "order": 2,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      3,
+      6
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      1,
+      2
+     ],
+     "slot_index": 1
+    },
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      14
+     ],
+     "slot_index": 2
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "CheckpointLoaderSimple"
+   },
+   "widgets_values": [
+    "512-base-ema.safetensors"
+   ],
+   "title": "SD 2 base (512-base-ema)"
+  },
+  {
+   "id": 3,
+   "type": "CLIPTextEncode",
+   "pos": [
+    0,
+    180
+   ],
+   "size": [
+    400,
+    160
+   ],
+   "flags": {},
+   "order": 3,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 1
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      4
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "CLIPTextEncode"
+   },
+   "widgets_values": [
+    "A photo of a mountain range at twilight"
+   ],
+   "title": "Positive prompt"
+  },
+  {
+   "id": 4,
+   "type": "CLIPTextEncode",
+   "pos": [
+    0,
+    380
+   ],
+   "size": [
+    400,
+    160
+   ],
+   "flags": {},
+   "order": 4,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 2
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      5
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "CLIPTextEncode"
+   },
+   "widgets_values": [
+    ""
+   ],
+   "title": "Negative prompt"
+  },
+  {
+   "id": 5,
+   "type": "CFGGuider",
+   "pos": [
+    440,
+    0
+   ],
+   "size": [
+    300,
+    100
+   ],
+   "flags": {},
+   "order": 5,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 3
+    },
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 4
+    },
+    {
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 5
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      9
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "CFGGuider"
+   },
+   "widgets_values": [
+    7.5
+   ],
+   "title": "CFG 7.5"
+  },
+  {
+   "id": 6,
+   "type": "EmptyLatentImage",
+   "pos": [
+    440,
+    160
+   ],
+   "size": [
+    300,
+    110
+   ],
+   "flags": {},
+   "order": 6,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      12
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "EmptyLatentImage"
+   },
+   "widgets_values": [
+    3072,
+    512,
+    1
+   ],
+   "title": "Canvas 3072 x 512"
+  },
+  {
+   "id": 7,
+   "type": "RandomNoise",
+   "pos": [
+    800,
+    0
+   ],
+   "size": [
+    300,
+    90
+   ],
+   "flags": {},
+   "order": 7,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "NOISE",
+     "type": "NOISE",
+     "links": [
+      8
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "RandomNoise"
+   },
+   "widgets_values": [
+    0,
+    "fixed"
+   ],
+   "title": "Noise (seed)"
+  },
+  {
+   "id": 8,
+   "type": "BasicScheduler",
+   "pos": [
+    800,
+    130
+   ],
+   "size": [
+    300,
+    110
+   ],
+   "flags": {},
+   "order": 8,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 6
+    }
+   ],
+   "outputs": [
+    {
+     "name": "SIGMAS",
+     "type": "SIGMAS",
+     "links": [
+      11
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicScheduler"
+   },
+   "widgets_values": [
+    "ddim_uniform",
+    50,
+    1.0
+   ],
+   "title": "Sigmas"
+  },
+  {
+   "id": 9,
+   "type": "SyncTweediesViews",
+   "pos": [
+    800,
+    280
+   ],
+   "size": [
+    300,
+    140
+   ],
+   "flags": {},
+   "order": 9,
+   "mode": 0,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "views",
+     "type": "SYNC_VIEWS",
+     "links": [
+      7
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SyncTweediesViews"
+   },
+   "widgets_values": [
+    512,
+    128,
+    "uniform",
+    4
+   ],
+   "title": "Views"
+  },
+  {
+   "id": 10,
+   "type": "SyncTweediesSampler",
+   "pos": [
+    800,
+    460
+   ],
+   "size": [
+    300,
+    80
+   ],
+   "flags": {},
+   "order": 10,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "views",
+     "type": "SYNC_VIEWS",
+     "link": 7
+    }
+   ],
+   "outputs": [
+    {
+     "name": "SAMPLER",
+     "type": "SAMPLER",
+     "links": [
+      10
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SyncTweediesSampler"
+   },
+   "widgets_values": [
+    "synctweedies"
+   ],
+   "title": "Synchronisation mode"
+  },
+  {
+   "id": 11,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    1160,
+    0
+   ],
+   "size": [
+    320,
+    360
+   ],
+   "flags": {},
+   "order": 11,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 8
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 9
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 10
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 11
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 12
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      13
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": [],
+     "slot_index": 1
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced"
+   },
+   "widgets_values": [],
+   "title": "Sampling"
+  },
+  {
+   "id": 12,
+   "type": "VAEDecodeTiled",
+   "pos": [
+    1520,
+    0
+   ],
+   "size": [
+    260,
+    150
+   ],
+   "flags": {},
+   "order": 12,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 13
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 14
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      15
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecodeTiled"
+   },
+   "widgets_values": [
+    512,
+    64,
+    64,
+    8
+   ],
+   "title": "VAE decode (tiled)"
+  },
+  {
+   "id": 13,
+   "type": "SaveImage",
+   "pos": [
+    1820,
+    0
+   ],
+   "size": [
+    1100,
+    400
+   ],
+   "flags": {},
+   "order": 13,
+   "mode": 0,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 15
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "synctweedies/sd2"
+   ],
+   "title": "Result"
+  },
+  {
+   "id": 14,
+   "type": "MarkdownNote",
+   "pos": [
+    3300,
+    -400
+   ],
+   "size": [
+    900,
+    300
+   ],
+   "flags": {},
+   "order": 14,
+   "mode": 2,
+   "inputs": [],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "MarkdownNote"
+   },
+   "widgets_values": [
+    "## PixCell-256, histology, 2048 x 2048 grid\nPixArt-like DiT trained on TCGA, eps prediction, SD3 VAE latent. Unconditional (learned empty embedding).\nSame Views / Synchronisation nodes as SD 2. 121 views of 256, stride 192.\nPixCell-1024: stride 512, views_per_batch 2."
+   ],
+   "title": "Note"
+  },
+  {
+   "id": 15,
+   "type": "PixCellLoader",
+   "pos": [
+    3300,
+    0
+   ],
+   "size": [
+    320,
+    100
+   ],
+   "flags": {},
+   "order": 15,
+   "mode": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "PIXCELL",
+     "type": "PIXCELL",
+     "links": [
+      16,
+      23,
+      26
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "PixCellLoader"
+   },
+   "widgets_values": [
+    "PixCell-256",
+    "float16"
+   ],
+   "title": "PixCell loader"
+  },
+  {
+   "id": 16,
+   "type": "PixCellDenoiser",
+   "pos": [
+    3300,
+    140
+   ],
+   "size": [
+    320,
+    60
+   ],
+   "flags": {},
+   "order": 16,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "pixcell",
+     "type": "PIXCELL",
+     "link": 16
+    }
+   ],
+   "outputs": [
+    {
+     "name": "denoiser",
+     "type": "PIXCELL_DENOISER",
+     "links": [
+      19
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "PixCellDenoiser"
+   },
+   "widgets_values": [],
+   "title": "Denoiser (DiT + Tweedie)"
+  },
+  {
+   "id": 17,
+   "type": "RandomNoise",
+   "pos": [
+    3680,
+    0
+   ],
+   "size": [
+    300,
+    90
+   ],
+   "flags": {},
+   "order": 17,
+   "mode": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "NOISE",
+     "type": "NOISE",
+     "links": [
+      18
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "RandomNoise"
+   },
+   "widgets_values": [
+    0,
+    "fixed"
+   ],
+   "title": "Noise (seed)"
+  },
+  {
+   "id": 18,
+   "type": "PixCellSchedule",
+   "pos": [
+    3680,
+    130
+   ],
+   "size": [
+    300,
+    80
+   ],
+   "flags": {},
+   "order": 18,
+   "mode": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "SIGMAS",
+     "type": "SIGMAS",
+     "links": [
+      21
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "PixCellSchedule"
+   },
+   "widgets_values": [
+    50
+   ],
+   "title": "Sigmas"
+  },
+  {
+   "id": 19,
+   "type": "PixCellEmptyLatent",
+   "pos": [
+    3680,
+    250
+   ],
+   "size": [
+    300,
+    100
+   ],
+   "flags": {},
+   "order": 19,
+   "mode": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      22
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "PixCellEmptyLatent"
+   },
+   "widgets_values": [
+    2048,
+    2048
+   ],
+   "title": "Canvas 2048 x 2048"
+  },
+  {
+   "id": 20,
+   "type": "SyncTweediesViews",
+   "pos": [
+    3680,
+    390
+   ],
+   "size": [
+    300,
+    140
+   ],
+   "flags": {},
+   "order": 20,
+   "mode": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "views",
+     "type": "SYNC_VIEWS",
+     "links": [
+      17
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SyncTweediesViews"
+   },
+   "widgets_values": [
+    256,
+    192,
+    "uniform",
+    16
+   ],
+   "title": "Views"
+  },
+  {
+   "id": 21,
+   "type": "SyncTweediesSampler",
+   "pos": [
+    3680,
+    570
+   ],
+   "size": [
+    300,
+    80
+   ],
+   "flags": {},
+   "order": 21,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "views",
+     "type": "SYNC_VIEWS",
+     "link": 17
+    }
+   ],
+   "outputs": [
+    {
+     "name": "SAMPLER",
+     "type": "SAMPLER",
+     "links": [
+      20
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SyncTweediesSampler"
+   },
+   "widgets_values": [
+    "synctweedies"
+   ],
+   "title": "Synchronisation mode"
+  },
+  {
+   "id": 22,
+   "type": "PixCellSampling",
+   "pos": [
+    4040,
+    0
+   ],
+   "size": [
+    320,
+    360
+   ],
+   "flags": {},
+   "order": 22,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 18
+    },
+    {
+     "name": "denoiser",
+     "type": "PIXCELL_DENOISER",
+     "link": 19
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 20
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 21
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 22
+    }
+   ],
+   "outputs": [
+    {
+     "name": "latent",
+     "type": "PIXCELL_LATENT",
+     "links": [
+      24
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "trajectory",
+     "type": "PIXCELL_LATENT",
+     "links": [
+      27
+     ],
+     "slot_index": 1
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "PixCellSampling"
+   },
+   "widgets_values": [
+    10
+   ],
+   "title": "Sampling"
+  },
+  {
+   "id": 23,
+   "type": "PixCellDecode",
+   "pos": [
+    4400,
+    0
+   ],
+   "size": [
+    280,
+    80
+   ],
+   "flags": {},
+   "order": 23,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "pixcell",
+     "type": "PIXCELL",
+     "link": 23
+    },
+    {
+     "name": "latent",
+     "type": "PIXCELL_LATENT",
+     "link": 24
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      25
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "PixCellDecode"
+   },
+   "widgets_values": [],
+   "title": "Decode"
+  },
+  {
+   "id": 24,
+   "type": "SaveImage",
+   "pos": [
+    4720,
+    0
+   ],
+   "size": [
+    700,
+    700
+   ],
+   "flags": {},
+   "order": 24,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 25
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "synctweedies/pixcell"
+   ],
+   "title": "Result"
+  },
+  {
+   "id": 25,
+   "type": "PixCellDecode",
+   "pos": [
+    4400,
+    420
+   ],
+   "size": [
+    280,
+    80
+   ],
+   "flags": {},
+   "order": 25,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "pixcell",
+     "type": "PIXCELL",
+     "link": 26
+    },
+    {
+     "name": "latent",
+     "type": "PIXCELL_LATENT",
+     "link": 27
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      28
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "PixCellDecode"
+   },
+   "widgets_values": [],
+   "title": "Decode trajectory"
+  },
+  {
+   "id": 26,
+   "type": "SaveAnimatedWEBP",
+   "pos": [
+    4040,
+    420
+   ],
+   "size": [
+    340,
+    380
+   ],
+   "flags": {},
+   "order": 26,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 28
+    }
+   ],
+   "outputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "links": [],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SaveAnimatedWEBP"
+   },
+   "widgets_values": [
+    "synctweedies/pixcell_trajectory",
+    3.0,
+    false,
+    85,
+    "default"
+   ],
+   "title": "x0_hat trajectory"
+  },
+  {
+   "id": 27,
+   "type": "MarkdownNote",
+   "pos": [
+    5900,
+    -420
+   ],
+   "size": [
+    900,
+    300
+   ],
+   "flags": {},
+   "order": 27,
+   "mode": 2,
+   "inputs": [],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "MarkdownNote"
+   },
+   "widgets_values": [
+    "## FLUX 3 Klein, flow matching, panorama 3072 x 1024\nSame nodes. For a flow model x = (1 - sigma) x0 + sigma eps, the step becomes an Euler step (detected automatically).\nDistilled model: 16 steps, CFG 1, shift log(16). 9 views of 1024, stride 256. About 20 GB of weights."
+   ],
+   "title": "Note"
+  },
+  {
+   "id": 28,
+   "type": "UNETLoader",
+   "pos": [
+    5900,
+    0
+   ],
+   "size": [
+    340,
+    100
+   ],
+   "flags": {},
+   "order": 28,
+   "mode": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      29
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "UNETLoader"
+   },
+   "widgets_values": [
+    "flux3-image-klein-bf16.safetensors",
+    "default"
+   ],
+   "title": "FLUX 3 Klein"
+  },
+  {
+   "id": 29,
+   "type": "ModelSamplingFlux",
+   "pos": [
+    5900,
+    140
+   ],
+   "size": [
+    340,
+    150
+   ],
+   "flags": {},
+   "order": 29,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 29
+    }
+   ],
+   "outputs": [
+    {
+     "name": "MODEL",
+     "type": "MODEL",
+     "links": [
+      32,
+      35
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "ModelSamplingFlux"
+   },
+   "widgets_values": [
+    2.77259,
+    2.77259,
+    1024,
+    1024
+   ],
+   "title": "Sigma shift log(16)"
+  },
+  {
+   "id": 30,
+   "type": "CLIPLoader",
+   "pos": [
+    5900,
+    330
+   ],
+   "size": [
+    340,
+    110
+   ],
+   "flags": {},
+   "order": 30,
+   "mode": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "CLIP",
+     "type": "CLIP",
+     "links": [
+      30,
+      31
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "CLIPLoader"
+   },
+   "widgets_values": [
+    "qwen3vl_4b_bf16.safetensors",
+    "flux3",
+    "default"
+   ],
+   "title": "Qwen3-VL 4B text encoder"
+  },
+  {
+   "id": 31,
+   "type": "VAELoader",
+   "pos": [
+    5900,
+    480
+   ],
+   "size": [
+    340,
+    80
+   ],
+   "flags": {},
+   "order": 31,
+   "mode": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "VAE",
+     "type": "VAE",
+     "links": [
+      43
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAELoader"
+   },
+   "widgets_values": [
+    "flux2-vae.safetensors"
+   ],
+   "title": "FLUX 2 VAE"
+  },
+  {
+   "id": 32,
+   "type": "CLIPTextEncode",
+   "pos": [
+    6300,
+    0
+   ],
+   "size": [
+    400,
+    160
+   ],
+   "flags": {},
+   "order": 32,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 30
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      33
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "CLIPTextEncode"
+   },
+   "widgets_values": [
+    "A photo of a mountain range at twilight"
+   ],
+   "title": "Positive prompt"
+  },
+  {
+   "id": 33,
+   "type": "CLIPTextEncode",
+   "pos": [
+    6300,
+    200
+   ],
+   "size": [
+    400,
+    160
+   ],
+   "flags": {},
+   "order": 33,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "clip",
+     "type": "CLIP",
+     "link": 31
+    }
+   ],
+   "outputs": [
+    {
+     "name": "CONDITIONING",
+     "type": "CONDITIONING",
+     "links": [
+      34
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "CLIPTextEncode"
+   },
+   "widgets_values": [
+    ""
+   ],
+   "title": "Negative prompt (unused at CFG 1)"
+  },
+  {
+   "id": 34,
+   "type": "CFGGuider",
+   "pos": [
+    6740,
+    0
+   ],
+   "size": [
+    300,
+    100
+   ],
+   "flags": {},
+   "order": 34,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 32
+    },
+    {
+     "name": "positive",
+     "type": "CONDITIONING",
+     "link": 33
+    },
+    {
+     "name": "negative",
+     "type": "CONDITIONING",
+     "link": 34
+    }
+   ],
+   "outputs": [
+    {
+     "name": "GUIDER",
+     "type": "GUIDER",
+     "links": [
+      38
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "CFGGuider"
+   },
+   "widgets_values": [
+    1.0
+   ],
+   "title": "CFG 1"
+  },
+  {
+   "id": 35,
+   "type": "EmptyFlux2LatentImage",
+   "pos": [
+    6740,
+    160
+   ],
+   "size": [
+    300,
+    110
+   ],
+   "flags": {},
+   "order": 35,
+   "mode": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "LATENT",
+     "type": "LATENT",
+     "links": [
+      41
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "EmptyFlux2LatentImage"
+   },
+   "widgets_values": [
+    3072,
+    1024,
+    1
+   ],
+   "title": "Canvas 3072 x 1024"
+  },
+  {
+   "id": 36,
+   "type": "RandomNoise",
+   "pos": [
+    7100,
+    0
+   ],
+   "size": [
+    300,
+    90
+   ],
+   "flags": {},
+   "order": 36,
+   "mode": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "NOISE",
+     "type": "NOISE",
+     "links": [
+      37
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "RandomNoise"
+   },
+   "widgets_values": [
+    0,
+    "fixed"
+   ],
+   "title": "Noise (seed)"
+  },
+  {
+   "id": 37,
+   "type": "BasicScheduler",
+   "pos": [
+    7100,
+    130
+   ],
+   "size": [
+    300,
+    110
+   ],
+   "flags": {},
+   "order": 37,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "model",
+     "type": "MODEL",
+     "link": 35
+    }
+   ],
+   "outputs": [
+    {
+     "name": "SIGMAS",
+     "type": "SIGMAS",
+     "links": [
+      40
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "BasicScheduler"
+   },
+   "widgets_values": [
+    "simple",
+    16,
+    1.0
+   ],
+   "title": "Sigmas"
+  },
+  {
+   "id": 38,
+   "type": "SyncTweediesViews",
+   "pos": [
+    7100,
+    280
+   ],
+   "size": [
+    300,
+    140
+   ],
+   "flags": {},
+   "order": 38,
+   "mode": 2,
+   "inputs": [],
+   "outputs": [
+    {
+     "name": "views",
+     "type": "SYNC_VIEWS",
+     "links": [
+      36
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SyncTweediesViews"
+   },
+   "widgets_values": [
+    1024,
+    256,
+    "uniform",
+    1
+   ],
+   "title": "Views"
+  },
+  {
+   "id": 39,
+   "type": "SyncTweediesSampler",
+   "pos": [
+    7100,
+    460
+   ],
+   "size": [
+    300,
+    80
+   ],
+   "flags": {},
+   "order": 39,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "views",
+     "type": "SYNC_VIEWS",
+     "link": 36
+    }
+   ],
+   "outputs": [
+    {
+     "name": "SAMPLER",
+     "type": "SAMPLER",
+     "links": [
+      39
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SyncTweediesSampler"
+   },
+   "widgets_values": [
+    "synctweedies"
+   ],
+   "title": "Synchronisation mode"
+  },
+  {
+   "id": 40,
+   "type": "SamplerCustomAdvanced",
+   "pos": [
+    7460,
+    0
+   ],
+   "size": [
+    320,
+    360
+   ],
+   "flags": {},
+   "order": 40,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "noise",
+     "type": "NOISE",
+     "link": 37
+    },
+    {
+     "name": "guider",
+     "type": "GUIDER",
+     "link": 38
+    },
+    {
+     "name": "sampler",
+     "type": "SAMPLER",
+     "link": 39
+    },
+    {
+     "name": "sigmas",
+     "type": "SIGMAS",
+     "link": 40
+    },
+    {
+     "name": "latent_image",
+     "type": "LATENT",
+     "link": 41
+    }
+   ],
+   "outputs": [
+    {
+     "name": "output",
+     "type": "LATENT",
+     "links": [
+      42
+     ],
+     "slot_index": 0
+    },
+    {
+     "name": "denoised_output",
+     "type": "LATENT",
+     "links": [],
+     "slot_index": 1
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "SamplerCustomAdvanced"
+   },
+   "widgets_values": [],
+   "title": "Sampling"
+  },
+  {
+   "id": 41,
+   "type": "VAEDecodeTiled",
+   "pos": [
+    7820,
+    0
+   ],
+   "size": [
+    260,
+    150
+   ],
+   "flags": {},
+   "order": 41,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "samples",
+     "type": "LATENT",
+     "link": 42
+    },
+    {
+     "name": "vae",
+     "type": "VAE",
+     "link": 43
+    }
+   ],
+   "outputs": [
+    {
+     "name": "IMAGE",
+     "type": "IMAGE",
+     "links": [
+      44
+     ],
+     "slot_index": 0
+    }
+   ],
+   "properties": {
+    "Node name for S&R": "VAEDecodeTiled"
+   },
+   "widgets_values": [
+    1024,
+    64,
+    64,
+    8
+   ],
+   "title": "VAE decode (tiled)"
+  },
+  {
+   "id": 42,
+   "type": "SaveImage",
+   "pos": [
+    8120,
+    0
+   ],
+   "size": [
+    1100,
+    400
+   ],
+   "flags": {},
+   "order": 42,
+   "mode": 2,
+   "inputs": [
+    {
+     "name": "images",
+     "type": "IMAGE",
+     "link": 44
+    }
+   ],
+   "outputs": [],
+   "properties": {
+    "Node name for S&R": "SaveImage"
+   },
+   "widgets_values": [
+    "synctweedies/flux3klein"
+   ],
+   "title": "Result"
+  }
+ ],
+ "links": [
+  [
+   1,
+   2,
+   1,
+   3,
+   0,
+   "CLIP"
+  ],
+  [
+   2,
+   2,
+   1,
+   4,
+   0,
+   "CLIP"
+  ],
+  [
+   3,
+   2,
+   0,
+   5,
+   0,
+   "MODEL"
+  ],
+  [
+   4,
+   3,
+   0,
+   5,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   5,
+   4,
+   0,
+   5,
+   2,
+   "CONDITIONING"
+  ],
+  [
+   6,
+   2,
+   0,
+   8,
+   0,
+   "MODEL"
+  ],
+  [
+   7,
+   9,
+   0,
+   10,
+   0,
+   "SYNC_VIEWS"
+  ],
+  [
+   8,
+   7,
+   0,
+   11,
+   0,
+   "NOISE"
+  ],
+  [
+   9,
+   5,
+   0,
+   11,
+   1,
+   "GUIDER"
+  ],
+  [
+   10,
+   10,
+   0,
+   11,
+   2,
+   "SAMPLER"
+  ],
+  [
+   11,
+   8,
+   0,
+   11,
+   3,
+   "SIGMAS"
+  ],
+  [
+   12,
+   6,
+   0,
+   11,
+   4,
+   "LATENT"
+  ],
+  [
+   13,
+   11,
+   0,
+   12,
+   0,
+   "LATENT"
+  ],
+  [
+   14,
+   2,
+   2,
+   12,
+   1,
+   "VAE"
+  ],
+  [
+   15,
+   12,
+   0,
+   13,
+   0,
+   "IMAGE"
+  ],
+  [
+   16,
+   15,
+   0,
+   16,
+   0,
+   "PIXCELL"
+  ],
+  [
+   17,
+   20,
+   0,
+   21,
+   0,
+   "SYNC_VIEWS"
+  ],
+  [
+   18,
+   17,
+   0,
+   22,
+   0,
+   "NOISE"
+  ],
+  [
+   19,
+   16,
+   0,
+   22,
+   1,
+   "PIXCELL_DENOISER"
+  ],
+  [
+   20,
+   21,
+   0,
+   22,
+   2,
+   "SAMPLER"
+  ],
+  [
+   21,
+   18,
+   0,
+   22,
+   3,
+   "SIGMAS"
+  ],
+  [
+   22,
+   19,
+   0,
+   22,
+   4,
+   "LATENT"
+  ],
+  [
+   23,
+   15,
+   0,
+   23,
+   0,
+   "PIXCELL"
+  ],
+  [
+   24,
+   22,
+   0,
+   23,
+   1,
+   "PIXCELL_LATENT"
+  ],
+  [
+   25,
+   23,
+   0,
+   24,
+   0,
+   "IMAGE"
+  ],
+  [
+   26,
+   15,
+   0,
+   25,
+   0,
+   "PIXCELL"
+  ],
+  [
+   27,
+   22,
+   1,
+   25,
+   1,
+   "PIXCELL_LATENT"
+  ],
+  [
+   28,
+   25,
+   0,
+   26,
+   0,
+   "IMAGE"
+  ],
+  [
+   29,
+   28,
+   0,
+   29,
+   0,
+   "MODEL"
+  ],
+  [
+   30,
+   30,
+   0,
+   32,
+   0,
+   "CLIP"
+  ],
+  [
+   31,
+   30,
+   0,
+   33,
+   0,
+   "CLIP"
+  ],
+  [
+   32,
+   29,
+   0,
+   34,
+   0,
+   "MODEL"
+  ],
+  [
+   33,
+   32,
+   0,
+   34,
+   1,
+   "CONDITIONING"
+  ],
+  [
+   34,
+   33,
+   0,
+   34,
+   2,
+   "CONDITIONING"
+  ],
+  [
+   35,
+   29,
+   0,
+   37,
+   0,
+   "MODEL"
+  ],
+  [
+   36,
+   38,
+   0,
+   39,
+   0,
+   "SYNC_VIEWS"
+  ],
+  [
+   37,
+   36,
+   0,
+   40,
+   0,
+   "NOISE"
+  ],
+  [
+   38,
+   34,
+   0,
+   40,
+   1,
+   "GUIDER"
+  ],
+  [
+   39,
+   39,
+   0,
+   40,
+   2,
+   "SAMPLER"
+  ],
+  [
+   40,
+   37,
+   0,
+   40,
+   3,
+   "SIGMAS"
+  ],
+  [
+   41,
+   35,
+   0,
+   40,
+   4,
+   "LATENT"
+  ],
+  [
+   42,
+   40,
+   0,
+   41,
+   0,
+   "LATENT"
+  ],
+  [
+   43,
+   31,
+   0,
+   41,
+   1,
+   "VAE"
+  ],
+  [
+   44,
+   41,
+   0,
+   42,
+   0,
+   "IMAGE"
+  ]
+ ],
+ "groups": [
+  {
+   "title": "SD 2 (DDPM, paper setup)",
+   "bounding": [
+    -40,
+    -440,
+    3200,
+    1100
+   ],
+   "color": "#3f789e",
+   "font_size": 24
+  },
+  {
+   "title": "PixCell-256 (histology) (muted, Ctrl+M to enable)",
+   "bounding": [
+    3260,
+    -460,
+    2560,
+    1300
+   ],
+   "color": "#8A8",
+   "font_size": 24
+  },
+  {
+   "title": "FLUX 3 Klein (flow matching) (muted)",
+   "bounding": [
+    5860,
+    -480,
+    3400,
+    1100
+   ],
+   "color": "#a1309b",
+   "font_size": 24
+  }
+ ],
+ "config": {},
+ "extra": {
+  "ds": {
+   "scale": 0.7,
+   "offset": [
+    40,
+    40
+   ]
+  }
+ },
+ "version": 0.4
+}
